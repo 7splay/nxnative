@@ -56,6 +56,7 @@ class App(unittest.TestCase):
             (t / 'patched' / n).write_bytes(b)
         (t / 'romfs/region_common/audio/edward.bfsar').write_bytes(b'snd')
         (t / 'cache/b-0123456789ab/k_b.metallib').write_bytes(b'lib'); (t / 'cache/b-0123456789ab/inputs.tsv').write_text('# stamp\n')
+        (t / 'cache/b-0123456789ab/k_b.json').write_text('{}'); (t / 'cache/b-0123456789ab/k_b.metal').write_text('msl'); (t / 'cache/b-0123456789ab/_b_build.json').write_text('[]')
         (t / 'cache/cas').mkdir()   # the Metal compile cache: not for the app
         for n in ('shader_map.tsv', 'pso_manifest.tsv', 'c1_full.tsv', 'game.tsv'): (t / 'profile' / n).write_text(n)
         (t / 'font/nintendo_ext.ttf').write_bytes(b'ttf')
@@ -95,6 +96,7 @@ class App(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in (c / 'Resources/dm').iterdir()),
                          ['c1_full.tsv', 'env.txt', 'font', 'main.cuts.tsv', 'main.fixups.tsv', 'main.gates.tsv', 'main.obs.tsv', 'main.patched.bin', 'pso_manifest.tsv', 'shader_map.tsv'])
         self.assertEqual([p.name for p in (c / 'Resources/msl').iterdir()], ['b-0123456789ab'])   # the libraries only, not the compile cache
+        self.assertEqual(sorted(p.name for p in (c / 'Resources/msl/b-0123456789ab').iterdir()), ['inputs.tsv', 'k_b.json', 'k_b.metallib'])
         self.assertEqual((c / 'Resources/msl/b-0123456789ab/k_b.metallib').read_bytes(), b'lib')
         self.assertTrue((c / 'Resources/romfs/region_common/audio/edward.bfsar').is_file())
         self.assertTrue((c / 'Resources/aoc/1/x').is_file()); self.assertTrue((c / 'Resources/dm/font/nintendo_ext.ttf').is_file())
